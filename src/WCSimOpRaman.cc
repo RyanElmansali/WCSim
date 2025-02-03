@@ -88,7 +88,7 @@
 G4OpRaman::G4OpRaman(const G4String& processName, G4ProcessType type)
            : G4VDiscreteProcess(processName, type)
 {
-        SetProcessSubType(fsOpRaman);
+        SetProcessSubType(fOpRaman);
 
         thePhysicsTable = NULL;
 
