@@ -368,6 +368,9 @@ std::string WCSimEnumerations::EnumAsString(ProcessType_t p)
   case (kOpRayleigh) :
     return "OpRayleigh";
     break;
+  case (kOpRaman) :
+    return "OpRaman";
+    break;
   case (kOpBoundaryProcess) :
     return "OpBoundary";
     break;
@@ -394,6 +397,9 @@ std::string WCSimEnumerations::EnumAsString(ProcessType_t p)
     break;
   case (kRayleighScattering) :
     return "Rayl";
+    break;
+  case (kRamanScattering) :
+    return "Raml";
     break;
   case (kMicroElecElastic) :
     return "MicroElecElastic";
@@ -637,6 +643,8 @@ ProcessType_t WCSimEnumerations::ProcessTypeStringToEnum(const std::string& str)
     return kOpAbsorption;
   } else if (str == "OpRayleigh") {
     return kOpRayleigh;
+  } else if (str == "OpRaman") {
+    return kOpRaman;
   } else if (str == "OpBoundary") {
     return kOpBoundaryProcess;
   } else if (str == "hImpactIoni") {
@@ -655,6 +663,8 @@ ProcessType_t WCSimEnumerations::ProcessTypeStringToEnum(const std::string& str)
     return kMuElecElastic;
   } else if (str == "Rayl") {
     return kRayleighScattering;
+  } else if (str == "Raml") {
+    return kRamanScattering;
   } else if (str == "MicroElecElastic") {
     return kMicroElecElastic;
   } else if (str == "AnnihiToMuPair") {
