@@ -12,6 +12,7 @@ WCSimTuningParameters::WCSimTuningParameters()
  TuningMessenger = new WCSimTuningMessenger(this);
  // Default values
  rayff=0.75;
+ ramff=1.0;
  bsrff=2.50;
  abwff=1.30;
  rgcff=0.32;
@@ -45,6 +46,7 @@ WCSimTuningParameters::~WCSimTuningParameters()
 void WCSimTuningParameters::SaveOptionsToOutput(WCSimRootOptions * wcopt)
 {
   wcopt->SetRayff(rayff);
+  wcopt->SetRamff(ramff);
   wcopt->SetBsrff(bsrff);
   wcopt->SetAbwff(abwff);
   wcopt->SetRgcff(rgcff);
