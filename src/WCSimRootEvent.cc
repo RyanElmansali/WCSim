@@ -625,11 +625,12 @@ WCSimRootCherenkovHit *WCSimRootTrigger::AddCherenkovHit(Int_t tubeID,
 
 WCSimRootCherenkovHitHistory *WCSimRootTrigger::AddCherenkovHitHistory(Int_t nRayScat,
              Int_t nMieScat,
+             Int_t nRamScat,
 					   std::vector<ReflectionSurface_t> reflec)
 {
   // Add a new Cherenkov hit history to the list of Cherenkov hit histories
   TClonesArray &cherenkovhithistories = *fCherenkovHitHistories;
-  WCSimRootCherenkovHitHistory* cherenkovhithistory = new(cherenkovhithistories[fNcherenkovhithistories++]) WCSimRootCherenkovHitHistory(nRayScat,nMieScat,reflec);
+  WCSimRootCherenkovHitHistory* cherenkovhithistory = new(cherenkovhithistories[fNcherenkovhithistories++]) WCSimRootCherenkovHitHistory(nRayScat,nMieScat,nRamScat,reflec);
   return cherenkovhithistory;
 }
 
@@ -683,11 +684,12 @@ WCSimRootCherenkovHitTime::WCSimRootCherenkovHitTime(Double_t truetime,
   }
 }
 
-WCSimRootCherenkovHitHistory::WCSimRootCherenkovHitHistory(Int_t nRayScat, Int_t nMieScat, std::vector<ReflectionSurface_t> refle)
+WCSimRootCherenkovHitHistory::WCSimRootCherenkovHitHistory(Int_t nRayScat, Int_t nMieScat, Int_t nRamScat, Intstd::vector<ReflectionSurface_t> refle)
 {
   // Create a WCSimRootCherenkovHitHistory object and fill it with stuff
   fNRayScat = nRayScat;
   fNMieScat = nMieScat;
+  fNRamScat = nRamScat;
   fReflec = refle;
 }
 
@@ -950,6 +952,7 @@ bool WCSimRootCherenkovHitHistory::CompareAllVariables(const WCSimRootCherenkovH
 
   failed = (!ComparisonPassed(fNRayScat, c->GetNRayScatters(), typeid(*this).name(), __func__, "RayleighScattering")) || failed;
   failed = (!ComparisonPassed(fNMieScat, c->GetNMieScatters(), typeid(*this).name(), __func__, "MieScattering")) || failed;
+  failed = (!ComparisonPassed(fNRamScat, c->GetNRamScatters(), typeid(*this).name(), __func__, "RamanScattering")) || failed;
   failed = (!ComparisonPassedVec(std::vector<int>(fReflec.begin(),fReflec.end()), std::vector<int>(c->GetReflectionSurfaces().begin(),c->GetReflectionSurfaces().end()), typeid(*this).name(), __func__, "Reflection")) || failed;
 
   return !failed;
