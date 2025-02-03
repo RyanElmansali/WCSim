@@ -1487,6 +1487,7 @@ void WCSimEventAction::FillRootEvent(G4int event_id,
         int trackID = (*WCDC_hits)[idigi]->GetTrackID(id);
         int hit_photon_RayScatter = 0;
         int hit_photon_MieScatter = 0;
+        int hit_photon_RamScatter = 0;
         std::vector<ReflectionSurface_t> hit_photon_reflection = std::vector<ReflectionSurface_t>();
         if (trackID>0) // skip noise hit
         {
@@ -1494,8 +1495,9 @@ void WCSimEventAction::FillRootEvent(G4int event_id,
           hit_photon_RayScatter = trj->GetPhotonRayScatter();
           hit_photon_MieScatter = trj->GetPhotonMieScatter();
           hit_photon_reflection = trj->GetPhotonReflection();
+          hit_photon_RamScatter = trj->GetPhotonRamScatter();
         }
-        wcsimrootevent->AddCherenkovHitHistory(hit_photon_RayScatter,hit_photon_MieScatter,hit_photon_reflection);
+        wcsimrootevent->AddCherenkovHitHistory(hit_photon_RayScatter,hit_photon_MieScatter,hit_photon_reflection,hit_photon_RamScatter);
 #endif
 	hit_time_true  = (*WCDC_hits)[idigi]->GetPreSmearTime(id);
 	hit_parentid = (*WCDC_hits)[idigi]->GetParentID(id);
@@ -2052,6 +2054,7 @@ void WCSimEventAction::FillRootEventHybrid(G4int event_id,
         int trackID = (*WCDC_hits)[idigi]->GetTrackID(id);
         int hit_photon_RayScatter = 0;
         int hit_photon_MieScatter = 0;
+        int hit_photon_RamScatter = 0;
         std::vector<ReflectionSurface_t> hit_photon_reflection = std::vector<ReflectionSurface_t>();
         if (trackID>0) // skip noise hit
         {
@@ -2059,8 +2062,9 @@ void WCSimEventAction::FillRootEventHybrid(G4int event_id,
           hit_photon_RayScatter = trj->GetPhotonRayScatter();
           hit_photon_MieScatter = trj->GetPhotonMieScatter();
           hit_photon_reflection = trj->GetPhotonReflection();
+          hit_photon_RamScatter = trj->GetPhotonRamScatter();
         }
-        wcsimrootevent->AddCherenkovHitHistory(hit_photon_RayScatter,hit_photon_MieScatter,hit_photon_reflection);
+        wcsimrootevent->AddCherenkovHitHistory(hit_photon_RayScatter,hit_photon_MieScatter,hit_photon_reflection,hit_photon_RamScatter);
 #endif
 	hit_time_true  = (*WCDC_hits)[idigi]->GetPreSmearTime(id);
 	hit_parentid = (*WCDC_hits)[idigi]->GetParentID(id);
