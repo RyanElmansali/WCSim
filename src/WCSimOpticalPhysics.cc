@@ -47,6 +47,7 @@
 #include "G4OpWLS.hh"
 #include "G4Scintillation.hh"
 #include "G4Cerenkov.hh"
+#include "WCSimOpRaman.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
@@ -67,6 +68,7 @@ G4ThreadLocal G4OpAbsorption*      WCSimOpticalPhysics::fAbsorptionProcess = nul
 G4ThreadLocal G4OpRayleigh*        WCSimOpticalPhysics::fRayleighProcess = nullptr;
 G4ThreadLocal G4OpMieHG*           WCSimOpticalPhysics::fMieProcess = nullptr;
 G4ThreadLocal WCSimOpBoundaryProcess* WCSimOpticalPhysics::fBoundaryProcess = nullptr; // custom boundary process
+G4ThreadLocal G4OpRaman*           WCSimOpticalPhysics::fRamanProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -90,7 +92,8 @@ WCSimOpticalPhysics::WCSimOpticalPhysics(G4int verbose, const G4String& name)
     fRayleighVerbosity(0),
     fMieVerbosity(0),
     fInvokeSD(true),
-    fBoundaryVerbosity(0)
+    fBoundaryVerbosity(0),
+    fRamanVerbosity(0)
 
 {
   verboseLevel = verbose;
@@ -117,7 +120,7 @@ void WCSimOpticalPhysics::PrintStatistics() const
 // Print all processes activation and their parameters
 
   for ( G4int i=0; i<kNoProcess; i++ ) {
-    G4cout << "  " << G4OpticalProcessName(i) << " process:  ";
+    G4cout << "  " << WCSimOpticalProcessName(i) << " process:  ";
     if ( ! fProcessUse[i] ) {
       G4cout << "not used" << G4endl;
     }
@@ -190,6 +193,9 @@ void WCSimOpticalPhysics::ConstructProcess()
   fWLSProcess = new G4OpWLS();
   fWLSProcess->UseTimeProfile(fWLSTimeProfileName);
   OpProcesses[kWLS] = fWLSProcess;
+
+  fRamanProcess = new G4OpRaman();
+  OpProcesses[kRaman] = fRamanProcess;
 
   G4ProcessManager* pManager = nullptr;
   pManager = G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -355,6 +361,14 @@ void WCSimOpticalPhysics::SetWLSVerbosity(G4int ver)
   }
 }
 
+void WCSimOpticalPhysics::SetRamanVerbosity(G4int ver)
+{
+  fRamanVerbosity = ver;
+  if (fRamanProcess) {
+    fRamanProcess->SetVerboseLevel(fRamanVerbosity);
+  }
+}
+
 void WCSimOpticalPhysics::SetScintillationByParticleType(G4bool val)
 {
   fScintillationByParticleType = val;
@@ -423,7 +437,7 @@ void WCSimOpticalPhysics::SetBoundaryVerbosity(G4int ver)
   }
 }
 
-void WCSimOpticalPhysics::SetTrackSecondariesFirst(G4OpticalProcessIndex index,
+void WCSimOpticalPhysics::SetTrackSecondariesFirst(WCSimOpticalProcessIndex index,
                                                 G4bool trackSecondariesFirst)
 {
   if ( index >= kNoProcess ) return;
@@ -457,7 +471,7 @@ void WCSimOpticalPhysics::SetScintillationStackPhotons(G4bool stackingFlag)
   }
 }
 
-void WCSimOpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
+void WCSimOpticalPhysics::Configure(WCSimOpticalProcessIndex index, G4bool isUse)
 {
   // Configure the physics constructor to use/not use a selected process.
   // This method can only be called in PreInit> phase (before execution of
