@@ -44,6 +44,11 @@ WCSimTuningMessenger::WCSimTuningMessenger(WCSimTuningParameters* WCTuningPars):
   Mieff->SetParameterName("Mieff",true);
   Mieff->SetDefaultValue(0.0);
 
+  Ramff = new G4UIcmdWithADouble("/WCSim/tuning/ramff",this);
+  Ramff->SetGuidance("Set the Raman scattering parameter");
+  Ramff->SetParameterName("Ramff",true);
+  Ramff->SetDefaultValue(0.75);
+
   PMTCathodePara = new G4UIcmdWithAString("/WCSim/tuning/PMTCathodePara",this);
   PMTCathodePara->SetGuidance("Input file for PMT cathode parameters");
   PMTCathodePara->SetParameterName("PMTCathodePara",false);
@@ -96,6 +101,7 @@ WCSimTuningMessenger::WCSimTuningMessenger(WCSimTuningParameters* WCTuningPars):
 WCSimTuningMessenger::~WCSimTuningMessenger()
 {
   delete Rayff;
+  delete Ramff;
   delete Bsrff;
   delete Abwff;
   delete Rgcff;
@@ -124,6 +130,12 @@ void WCSimTuningMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     // Set the Rayleigh scattering parameter
     WCSimTuningParams->SetRayff(Rayff->GetNewDoubleValue(newValue));
     G4cout << "Setting Rayleigh scattering parameter " << Rayff->GetNewDoubleValue(newValue) << G4endl;
+  }
+
+  else if(command == Ramff) {
+    // Set the blacksheet reflection parameter                                                                                                      
+    WCSimTuningParams->SetRamff(Ramff->GetNewDoubleValue(newValue));
+    G4cout << "Setting Raman scattering parameter " << Ramff->GetNewDoubleValue(newValue) << G4endl;
   }
 
   else if(command == Bsrff) {
