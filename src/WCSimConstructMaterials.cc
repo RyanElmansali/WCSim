@@ -387,6 +387,16 @@ void WCSimDetectorConstruction::ConstructMaterials()
       1.34425, 1.34521, 1.34626, 1.3474, 1.34864,
       1.35002, 1.35153, 1.35321, 1.35507, 1.35717, 1.35955 };
   */
+   
+   //values from a Raman scattering study in water
+   const G4int NUMENTRIES_water_raman = 16;
+
+   G4double ENERGY_water_raman[NUMENTRIES_water_raman] =
+     {7.00e-09*GeV, 6.50e-09*GeV, 6.00e-09*GeV, 5.50e-09*GeV,
+      4.96e-09*GeV, 4.13e-09*GeV, 3.54e-09*GeV, 3.10e-09*GeV, 
+      2.76e-09*GeV, 2.48e-09*GeV, 2.25e-09*GeV, 2.07e-09*GeV, 
+      1.77e-09*GeV, 1.55e-09*GeV, 1.38e-09*GeV, 1.24e-09*GeV};  
+
 
    //From SKDETSIM water absorption
    const G4int NUMENTRIES_water=60;
@@ -408,7 +418,7 @@ void WCSimDetectorConstruction::ConstructMaterials()
        4.59258e-09*GeV, 4.76922e-09*GeV, 4.95999e-09*GeV, 5.16665e-09*GeV, 
        5.39129e-09*GeV, 5.63635e-09*GeV, 5.90475e-09*GeV, 6.19998e-09*GeV };
 
-
+  
 
       // Air
    G4double RINDEX_air[NUMENTRIES_water] = 
@@ -526,7 +536,9 @@ void WCSimDetectorConstruction::ConstructMaterials()
 
    // Get from the tuning parameters
    RAYFF = WCSimTuningParams->GetRayff();
+   
    G4cout << "RAYFF: " << RAYFF << G4endl;
+   G4cout << "RAMFF: " << RAMFF << G4endl;
 
    //T. Akiri: Values from Skdetsim 
    G4double RAYLEIGH_water[NUMENTRIES_water] = {
@@ -566,6 +578,19 @@ void WCSimDetectorConstruction::ConstructMaterials()
      1675.064*cm*RAYFF, 1422.710*cm*RAYFF, 1200.004*cm*RAYFF,
      1004.528*cm*RAYFF, 833.9666*cm*RAYFF, 686.1063*cm*RAYFF
      };*/
+   
+   // Get from the tuning parameters
+   G4double RAMFF = 0.625;
+   RAMFF = WCSimTuningParams->GetRamff();
+   G4cout << "RAMFF: " << RAMFF << G4endl;
+
+   //values from a Raman scattering study in water
+   G4double RAMAN_water[NUMENTRIES_water_raman] = {                                                                                                                         
+			17.1*m*RAMFF, 25.5*m*RAMFF, 38.9*m*RAMFF, 61.8*m*RAMFF, 
+      106.9*m*RAMFF, 281.1*m*RAMFF, 636.2*m*RAMFF, 1291.1*m*RAMFF, 
+      2410.3*m*RAMFF, 4213.0*m*RAMFF, 6981.8*m*RAMFF, 11072.5*m*RAMFF, 
+      25064.9*m*RAMFF,  50865.4*m*RAMFF,  94957.9*m*RAMFF, 165976.2*m*RAMFF
+      };
 
 
    // Get from the tuning parameters
@@ -1616,6 +1641,8 @@ void WCSimDetectorConstruction::ConstructMaterials()
    myMPT1->AddProperty("ABSLENGTH",ENERGY_water, ABSORPTION_water, NUMENTRIES_water);
    // M Fechner: new, don't let G4 compute it.
    myMPT1->AddProperty("RAYLEIGH",ENERGY_water,RAYLEIGH_water,NUMENTRIES_water);
+   myMPT1->AddProperty("RAMAN",ENERGY_water_raman,RAMAN_water,NUMENTRIES_water_raman);
+
 
   //  myMPT1->AddProperty("MIEHG",ENERGY_water,MIE_water,NUMENTRIES_water);
 //    myMPT1->AddConstProperty("MIEHG_FORWARD",MIE_water_const[0]);
@@ -1679,6 +1706,7 @@ void WCSimDetectorConstruction::ConstructMaterials()
    SilGelPropTable->AddProperty("RINDEX", ENERGY_water, RINDEX_SilGel, NUMENTRIES_water);
    SilGelPropTable->AddProperty("ABSLENGTH",ENERGY_SilGel, ABSORPTION_SilGel, 18); //ToDo: get measurement of optical properties of the optical gel. From slides: better than 40cm above 350nm.
    SilGelPropTable->AddProperty("RAYLEIGH",ENERGY_water,RAYLEIGH_water,NUMENTRIES_water); //ToDo: get actual Rayleigh scattering in gel
+   SilGelPropTable->AddProperty("RAMAN",ENERGY_water,RAYLEIGH_water,NUMENTRIES_water);
    SilGel->SetMaterialPropertiesTable(SilGelPropTable);
 
    G4MaterialPropertiesTable *SilGelPropTableWCTE = new G4MaterialPropertiesTable();
