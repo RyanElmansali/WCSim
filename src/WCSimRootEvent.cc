@@ -684,7 +684,7 @@ WCSimRootCherenkovHitTime::WCSimRootCherenkovHitTime(Double_t truetime,
   }
 }
 
-WCSimRootCherenkovHitHistory::WCSimRootCherenkovHitHistory(Int_t nRayScat, Int_t nMieScat, Int_t nRamScat, Intstd::vector<ReflectionSurface_t> refle)
+WCSimRootCherenkovHitHistory::WCSimRootCherenkovHitHistory(Int_t nRayScat, Int_t nMieScat, Int_t nRamScat, std::vector<ReflectionSurface_t> refle)
 {
   // Create a WCSimRootCherenkovHitHistory object and fill it with stuff
   fNRayScat = nRayScat;

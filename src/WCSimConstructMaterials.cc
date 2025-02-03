@@ -538,7 +538,6 @@ void WCSimDetectorConstruction::ConstructMaterials()
    RAYFF = WCSimTuningParams->GetRayff();
    
    G4cout << "RAYFF: " << RAYFF << G4endl;
-   G4cout << "RAMFF: " << RAMFF << G4endl;
 
    //T. Akiri: Values from Skdetsim 
    G4double RAYLEIGH_water[NUMENTRIES_water] = {

@@ -379,7 +379,7 @@ WCSimOpticalPhysicsMessenger::WCSimOpticalPhysicsMessenger(
     fRamanVerbosityCmd->SetRange("verbosity >= 0 && verbosity <= 2");
     fRamanVerbosityCmd->AvailableForStates(G4State_Idle);
 }
-}
+
 
 WCSimOpticalPhysicsMessenger::~WCSimOpticalPhysicsMessenger()
 {
