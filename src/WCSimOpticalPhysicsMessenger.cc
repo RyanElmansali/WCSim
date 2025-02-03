@@ -101,7 +101,8 @@ WCSimOpticalPhysicsMessenger::WCSimOpticalPhysicsMessenger(
 
     fAbsorptionVerbosityCmd(nullptr),
     fRayleighVerbosityCmd(nullptr),
-    fMieVerbosityCmd(nullptr)
+    fMieVerbosityCmd(nullptr),
+    fRamanVerbosityCmd(nullptr)
 
 {
     G4bool toBeBroadcasted = false;
@@ -122,6 +123,8 @@ WCSimOpticalPhysicsMessenger::WCSimOpticalPhysicsMessenger(
     CreateDirectory("/process/optical/mie/", "Mie scattering process commands");
     CreateDirectory("/process/optical/absorption/", "absorption process commands");
     CreateDirectory("/process/optical/rayleigh/", "Rayleigh scattering commands");
+    CreateDirectory("/process/optical/raman/", "Raman scattering commands");
+
 
     // general commands
     fActivateProcessCmd= new G4UIcommand("/process/optical/processActivation", this);
@@ -129,7 +132,7 @@ WCSimOpticalPhysicsMessenger::WCSimOpticalPhysicsMessenger(
     G4UIparameter* par = new G4UIparameter("proc_name",'s',false);
     G4String candidates;
     for ( G4int i=0; i<kNoProcess; i++ ) {
-        candidates += G4OpticalProcessName(i);
+        candidates += WCSimOpticalProcessName(i);
         candidates += G4String(" ");
     }
     par->SetParameterCandidates(candidates);
@@ -369,6 +372,13 @@ WCSimOpticalPhysicsMessenger::WCSimOpticalPhysicsMessenger(
     fMieVerbosityCmd->SetParameterName("verbosity", true);
     fMieVerbosityCmd->SetRange("verbosity >= 0 && verbosity <= 2");
     fMieVerbosityCmd->AvailableForStates(G4State_Idle);
+
+    fRamanVerbosityCmd = new G4UIcmdWithAnInteger("/process/optical/raman/verbose", this);
+    fRamanVerbosityCmd->SetGuidance("Verbosity for Raman process.");
+    fRamanVerbosityCmd->SetParameterName("verbosity", true);
+    fRamanVerbosityCmd->SetRange("verbosity >= 0 && verbosity <= 2");
+    fRamanVerbosityCmd->AvailableForStates(G4State_Idle);
+}
 }
 
 WCSimOpticalPhysicsMessenger::~WCSimOpticalPhysicsMessenger()
@@ -408,6 +418,7 @@ WCSimOpticalPhysicsMessenger::~WCSimOpticalPhysicsMessenger()
   delete fTrackSecondariesFirstCmd;
   delete fBoundaryInvokeSDCmd;
   delete fBoundaryInvokeSD1Cmd;
+  delete fRamanVerbosityCmd;
 }
 
 void WCSimOpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
@@ -433,6 +444,8 @@ void WCSimOpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
         fSelectedProcessIndex = kBoundary;
     } else if ( pn == "OpWLS" )         {
         fSelectedProcessIndex = kWLS;
+    } else if ( pn == "OpRaman" )    {
+        fSelectedProcessIndex = kRaman;
     } else {
         G4ExceptionDescription msg;
         msg << "Not allowed process name: "<<pn<<" (UI: "<<newValue<<")";
@@ -461,6 +474,8 @@ void WCSimOpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
         fSelectedProcessIndex = kBoundary;
       } else if ( pn == "OpWLS" )         {
         fSelectedProcessIndex = kWLS;
+      } else if ( pn == "OpRaman" )    {
+        fSelectedProcessIndex = kRaman;
       } else {
           G4ExceptionDescription msg;
           msg << "Not allowed process name: "<<pn<<" (UI: "<<newValue<<")";
@@ -583,6 +598,9 @@ void WCSimOpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
   else if (command == fMieVerbosityCmd) {
     fOpticalPhysics->SetMieVerbosity(fMieVerbosityCmd->GetNewIntValue(newValue));
   }
+  else if (command == fRamanVerbosityCmd) {
+    fOpticalPhysics->SetRamanVerbosity(fRamanVerbosityCmd->GetNewIntValue(newValue));
+  }
   else if (command == fBoundaryVerbosityCmd) {
     fOpticalPhysics->SetBoundaryVerbosity(fBoundaryVerbosityCmd->GetNewIntValue(newValue));
   }
@@ -594,6 +612,7 @@ void WCSimOpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
     fOpticalPhysics
       ->SetInvokeSD(fBoundaryInvokeSDCmd->GetNewBoolValue(newValue));
   }
+  
 }
 
 void WCSimOpticalPhysicsMessenger::Deprecated()
