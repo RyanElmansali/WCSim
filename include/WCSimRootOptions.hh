@@ -134,6 +134,7 @@ public:
   void SetAbwff(double iAbwff) {Abwff = iAbwff;}
   void SetRgcff(double iRgcff) {Rgcff = iRgcff;}
   void SetMieff(double iMieff) {Mieff = iMieff;}
+  void SetRamff(double iRamff) {Ramff = iRamff;}
   void SetQeff(double iQeff) {Qeff = iQeff;}//B.Q 2018/07/25
   void SetTtsff(double iTtsff) {Ttsff = iTtsff;}//TD 2019.06.22
   void SetPMTSatur(double iPmtSatur) {PmtSatur = iPmtSatur;}//TD 2019.07.16
@@ -142,6 +143,7 @@ public:
   void SetTopveto(bool iTopveto) {Topveto = iTopveto;}
   //WCSimTuningParameters gets
   double GetRayff() {return Rayff;}
+  double GetRamff() {return Ramff;}
   double GetBsrff() {return Bsrff;}
   double GetAbwff() {return Abwff;}
   double GetRgcff() {return Rgcff;}
@@ -205,6 +207,7 @@ private:
 
   //WCSimTuningParameters
   double Rayff; //!< Rayleigh scattering parameter
+  double Ramff; //!< Raman scattering parameter
   double Bsrff; //!< Blacksheet reflection parameter
   double Abwff; //!< Water attenuation parameter
   double Rgcff; //!< Cathode reflectivity parameter

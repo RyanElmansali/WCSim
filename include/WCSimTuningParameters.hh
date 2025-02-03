@@ -15,6 +15,9 @@ public:
   G4double GetRayff() {return rayff;}
   void SetRayff(G4double rparam) {rayff=rparam;}
 
+  G4double GetRamff() {return ramff;}
+  void SetRamff(G4double rparam) {ramff=rparam;}
+
   G4double GetBsrff() {return bsrff;}
   void SetBsrff(G4double rparam) {bsrff=rparam;}
 
@@ -79,6 +82,7 @@ private:
   // is created
 
   G4double rayff;
+  G4double ramff;
   G4double bsrff;
   G4double abwff;
   G4double rgcff;

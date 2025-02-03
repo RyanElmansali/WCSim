@@ -29,6 +29,7 @@ private:
 
   G4UIdirectory*      WCSimDir;
   G4UIcmdWithADouble* Rayff;
+  G4UIcmdWithADouble* Ramff;
   G4UIcmdWithADouble* Bsrff;
   G4UIcmdWithADouble* Abwff;
   G4UIcmdWithADouble* Rgcff;
